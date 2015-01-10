@@ -25,7 +25,7 @@ public interface MessageTokenizer<T> {
    T nextMessage();
 
    /**
-    * Convert the String message into bytes representation, taking care of encoding and framing.
+    * Convert the message into bytes representation, taking care of encoding and framing.
     * @return a ByteBuffer with the message content converted to bytes, after framing information has been added.
     */
    ByteBuffer getBytesForMessage(T msg) throws CharacterCodingException;

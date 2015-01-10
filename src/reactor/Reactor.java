@@ -150,13 +150,21 @@ public class Reactor<T> implements Runnable {
 				if (selKey.isValid() && selKey.isReadable()) {
 					ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
 					logger.info("Channel is ready for reading");
-					handler.read();
+					try {
+						handler.read();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 				// Check if there are messages to send
 				if (selKey.isValid() && selKey.isWritable()) {
 					ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
 					logger.info("Channel is ready for writing");
-					handler.write();
+					try {
+						handler.write();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

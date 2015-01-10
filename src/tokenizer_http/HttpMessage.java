@@ -10,8 +10,10 @@ import java.util.Map;
  */
 public abstract class HttpMessage implements Message<HttpMessage> {
 
-    private final Map<String, String> _headers;
-    private String _body; // object?
+    public static final String DELIMITER = "$";
+    protected static final String HTTP_VERSION = "HTTP/1.1";
+    protected final Map<String, String> _headers;
+    protected String _body; // object?
 
     public HttpMessage() {
         this._headers = new HashMap<String, String>();
@@ -34,4 +36,6 @@ public abstract class HttpMessage implements Message<HttpMessage> {
     public void addBody(String body) {
         _body = body;
     }
+
+    public abstract String toString();
 }

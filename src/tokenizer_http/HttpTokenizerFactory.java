@@ -9,6 +9,6 @@ import tokenizer.TokenizerFactory;
 public class HttpTokenizerFactory implements TokenizerFactory {
     @Override
     public MessageTokenizer create() {
-        return null;
+        return new HttpMessageTokenizer(HttpMessage.DELIMITER);
     }
 }

@@ -20,7 +20,6 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
     private final String HTTP_VERSION = "HTTP/1.1";
 
     private final Vector<HttpMessage> _messageBuf = new Vector<HttpMessage>(); // holds complete HTTP messages.
-    private final Vector<ByteBuffer> _buffers = new Vector<ByteBuffer>(); // holds raw bytes before parsing
     private final StringBuffer _stringBuf = new StringBuffer(); // holds incomplete message string
 
     private final CharsetDecoder _decoder;
@@ -45,7 +44,7 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
 
     @Override
     public synchronized boolean hasMessage() {
-        return _stringBuf.indexOf(_messageSeparator) != -1; // a complete message will contain a delimiter
+        return (_stringBuf.indexOf(_messageSeparator) != -1); // a complete message will contain a delimiter
     }
 
     @Override
@@ -56,26 +55,39 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
 
         int messageEnd = _stringBuf.indexOf(_messageSeparator);
 
-        if (messageEnd != -1) {
+        if (messageEnd != -1) { // if separator char exists, buffer contains an entire message
             rawMessageString = _stringBuf.substring(0, messageEnd);
             _stringBuf.delete(0, messageEnd + _messageSeparator.length()); // clear retrieved message from buffer
 
-            String[] firstLine = splitFirstLine(messageByLine[0]); // retrieve first line of HTTP message
+            String line = getFirstLine(rawMessageString);
+            String[] splitFirstLine = splitFirstLine(line); // retrieve first line of HTTP message
 
-            if (isResponseMessage(firstLine)) {
-                HttpStatusCodes statusCode = HttpStatusCodes.valueOf(firstLine[1]);
+            if (isResponseMessage(splitFirstLine)) { // response message?
+                HttpStatusCodes statusCode = HttpStatusCodes.valueOf(splitFirstLine[1]);
+
                 httpMessage = new HttpResponseMessage(statusCode);
 
             } else { // request message, then..
-                HttpRequestType httpRequestType = HttpRequestType.valueOf(firstLine[0]);
-                String requestURI = firstLine[1];
+                HttpRequestType httpRequestType = HttpRequestType.valueOf(splitFirstLine[0]);
+                String requestURI = splitFirstLine[1];
+
                 httpMessage = new HttpRequestMessage(httpRequestType, requestURI);
             }
 
 
-            while (!getFirstLine(rawMessageString).equals("")) {
+            // getting headers..
+            while (!line.equals("")) {
+                int delimiterIndex = line.indexOf(":");
 
+                String name = line.substring(0, delimiterIndex);
+                String value = line.substring(delimiterIndex + 1);
+
+                httpMessage.addHeader(name, value);
+                line = getFirstLine(line);
             }
+
+            // getting body..
+            httpMessage.addBody(getFirstLine(line));
         }
 
         return httpMessage;
@@ -83,6 +95,8 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
 
     @Override
     public ByteBuffer getBytesForMessage(HttpMessage msg) throws CharacterCodingException {
+
+
         return null;
     }
 
@@ -90,13 +104,24 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
         // a response message will always begin with HTTP/1.1
         return firstLine[0] == HTTP_VERSION;
     }
+
     private String getFirstLine(String message) {
         int lineBreak = message.indexOf("\r\n|\r|\n");
+
         String firstLine = message.substring(0, lineBreak);
         message = message.substring(lineBreak);
+
         return  firstLine;
     }
+
     private String[] splitFirstLine(String line) {
         return line.split(" ");
+    }
+
+    private String httpMessageToString(HttpMessage httpMessage) {
+        StringBuilder sb = new StringBuilder();
+
+
+        return sb.toString();
     }
 }

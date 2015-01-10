@@ -17,5 +17,11 @@ public enum HttpStatusCodes {
         this._code = code;
         this._status = status;
     }
+    public String getCode() {
+        return _code + "";
+    }
 
+    public String getStatus() {
+        return _status;
+    }
 }
