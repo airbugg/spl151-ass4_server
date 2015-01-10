@@ -7,10 +7,14 @@ import java.util.Map;
  */
 public class HttpResponseMessage extends HttpMessage {
 
-    private final HttpStatusCodes _httpStatusCode;
+    private final HttpStatusCode _httpStatusCode;
 
-    public HttpResponseMessage(HttpStatusCodes httpStatusCodes) {
-        _httpStatusCode = httpStatusCodes;
+    public HttpResponseMessage(HttpStatusCode httpStatusCode) {
+        _httpStatusCode = httpStatusCode;
+    }
+
+    public HttpStatusCode getHttpStatusCode() {
+        return _httpStatusCode;
     }
 
     public String toString() {

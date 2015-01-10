@@ -63,7 +63,7 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
             String[] splitFirstLine = splitFirstLine(line); // retrieve first line of HTTP message
 
             if (isResponseMessage(splitFirstLine)) { // response message?
-                HttpStatusCodes statusCode = HttpStatusCodes.valueOf(splitFirstLine[1]);
+                HttpStatusCode statusCode = HttpStatusCode.valueOf(splitFirstLine[1]);
 
                 httpMessage = new HttpResponseMessage(statusCode);
 
@@ -82,12 +82,12 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
                 String name = line.substring(0, delimiterIndex);
                 String value = line.substring(delimiterIndex + 1);
 
-                httpMessage.addHeader(name, value);
+                httpMessage.addMessageHeader(name, value);
                 line = getFirstLine(line);
             }
 
             // getting body..
-            httpMessage.addBody(getFirstLine(line));
+            httpMessage.addMessageBody(getFirstLine(line));
         }
 
         return httpMessage;

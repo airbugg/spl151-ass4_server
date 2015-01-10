@@ -15,6 +15,14 @@ public class HttpRequestMessage extends HttpMessage {
         _httpRequestURI = httpRequestUri;
     }
 
+    public String getHttpRequestURI() {
+        return _httpRequestURI;
+    }
+
+    public HttpRequestType getHttpRequestType() {
+        return _httpRequestType;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
