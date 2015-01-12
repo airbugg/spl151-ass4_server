@@ -8,7 +8,7 @@ import java.nio.charset.CharacterCodingException;
 /**
  * Created by Eugene on 09/01/2015.
  */
-public class WhatsappMessageTokenizer implements MessageTokenizer<WhatsappMessage> {
+public class WhatsappMessageTokenizer implements MessageTokenizer<WhatsappOverHttpMessage> {
     @Override
     public void addBytes(ByteBuffer bytes) {
 
@@ -20,12 +20,12 @@ public class WhatsappMessageTokenizer implements MessageTokenizer<WhatsappMessag
     }
 
     @Override
-    public WhatsappMessage nextMessage() {
+    public WhatsappOverHttpMessage nextMessage() {
         return null;
     }
 
     @Override
-    public ByteBuffer getBytesForMessage(WhatsappMessage msg) throws CharacterCodingException {
+    public ByteBuffer getBytesForMessage(WhatsappOverHttpMessage msg) throws CharacterCodingException {
         return null;
     }
 }

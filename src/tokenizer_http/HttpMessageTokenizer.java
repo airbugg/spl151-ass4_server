@@ -25,9 +25,8 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
     private final CharsetDecoder _decoder;
     private final CharsetEncoder _encoder;
 
-    public HttpMessageTokenizer(String _messageSeparator) {
-        this._messageSeparator = _messageSeparator;
-
+    public HttpMessageTokenizer() {
+        _messageSeparator = "$";
         Charset charset = Charset.forName("UTF-8"); // we'll be encoding / decoding our byte stream using UTF-8
         this._decoder = charset.newDecoder();
         this._encoder = charset.newEncoder();

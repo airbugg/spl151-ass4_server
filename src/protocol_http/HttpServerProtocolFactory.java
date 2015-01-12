@@ -7,9 +7,9 @@ import tokenizer_http.HttpMessage;
 /**
  * Created by airbag on 1/8/15.
  */
-public class HttpProtocolFactory implements ServerProtocolFactory<HttpMessage> {
+public class HttpServerProtocolFactory implements ServerProtocolFactory<HttpMessage> {
     @Override
     public AsyncServerProtocol<HttpMessage> create() {
-        return null;
+        return new HttpServerProtocol();
     }
 }

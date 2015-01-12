@@ -1,20 +1,25 @@
 package reactor;
 
+import protocol.AsyncServerProtocol;
+import protocol.ServerProtocolFactory;
+import protocol_whatsapp.WhatsappOverHttpProtocol;
+import tokenizer.MessageTokenizer;
+import tokenizer.TokenizerFactory;
+import tokenizer_http.HttpMessage;
+import tokenizer_http.HttpMessageTokenizer;
+import tokenizer_whatsapp.WhatsappOverHttpMessage;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
-
-import protocol.*;
-import tokenizer.*;
 
 /**
  * An implementation of the Reactor pattern.
@@ -214,8 +219,7 @@ public class Reactor<T> implements Runnable {
 			int port = Integer.parseInt(args[0]);
 			int poolSize = Integer.parseInt(args[1]);
 
-			//Reactor<HttpMessage> reactor = startHttpServer(port, poolSize);
-			Reactor<StringMessage> reactor = startEchoServer(port, poolSize);
+			//Reactor<HttpMessage> reactor = startWhatsappServer(port, poolSize);
 
 			Thread thread = new Thread(reactor);
 			thread.start();
@@ -226,29 +230,10 @@ public class Reactor<T> implements Runnable {
 		}
 	}
 
-	public static Reactor<StringMessage> startEchoServer(int port, int poolSize){
-		ServerProtocolFactory<StringMessage> protocolMaker = new ServerProtocolFactory<StringMessage>() {
-			public AsyncServerProtocol<StringMessage> create() {
-				return new EchoProtocol();
-			}
-		};
-
-		
-		final Charset charset = Charset.forName("UTF-8");
-		TokenizerFactory<StringMessage> tokenizerMaker = new TokenizerFactory<StringMessage>() {
-			public MessageTokenizer<StringMessage> create() {
-				return new FixedSeparatorMessageTokenizer("\n", charset);
-			}
-		};
-
-		Reactor<StringMessage> reactor = new Reactor<StringMessage>(port, poolSize, protocolMaker, tokenizerMaker);
-		return reactor;
-	}
-
-	public static Reactor<HttpMessage> startHttpServer(int port, int poolSize) throws Exception{
-		ServerProtocolFactory<HttpMessage> protocolMaker = new ServerProtocolFactory<HttpMessage>() {
-			public AsyncServerProtocol<HttpMessage> create() {
-				return new HttpProtocol();
+	public static Reactor<WhatsappOverHttpMessage> startWhatsappServer(int port, int poolSize) throws Exception{
+		ServerProtocolFactory<WhatsappOverHttpMessage> protocolMaker = new ServerProtocolFactory<WhatsappOverHttpMessage>() {
+			public AsyncServerProtocol<WhatsappOverHttpMessage> create() {
+				return new WhatsappOverHttpProtocol();
 			}
 		};
 

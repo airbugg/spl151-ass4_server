@@ -1,11 +1,13 @@
 package tokenizer_http;
 
+import tokenizer.Message;
+
 import java.util.Map;
 
 /**
  * this class represents an HTTP response. Inherits from HttpMessage.
  */
-public class HttpResponseMessage extends HttpMessage {
+public class HttpResponseMessage extends HttpMessage implements Message<HttpMessage> {
 
     private final HttpStatusCode _httpStatusCode;
 

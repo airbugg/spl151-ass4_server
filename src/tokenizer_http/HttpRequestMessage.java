@@ -1,11 +1,13 @@
 package tokenizer_http;
 
+import tokenizer.Message;
+
 import java.util.Map;
 
 /**
  * this class represents an HTTP request object. Inherits from HttpMessage.
  */
-public class HttpRequestMessage extends HttpMessage {
+public class HttpRequestMessage extends HttpMessage implements Message<HttpMessage> {
 
     private final HttpRequestType _httpRequestType;
     private final String _httpRequestURI;
