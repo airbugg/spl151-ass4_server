@@ -82,11 +82,11 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
                 String value = line.substring(delimiterIndex + 1);
 
                 httpMessage.addMessageHeader(name, value);
-                line = getFirstLine(line);
+                line = getFirstLine(rawMessageString);
             }
 
-            // getting body..
-            httpMessage.addMessageBody(getFirstLine(line));
+            // add body
+
         }
 
         return httpMessage;

@@ -7,6 +7,7 @@ import protocol.ServerProtocolFactory;
 import protocol_whatsapp.WhatsappProtocolFactory;
 import tokenizer.TokenizerFactory;
 import tokenizer_whatsaap.WhatsAppTokenizerFactory;
+import tokenizer_whatsapp.WhatsAppTokenizerFactory;
 
 public class MultipleClientProtocolServer<T> implements Runnable {
 	private ServerSocket serverSocket;

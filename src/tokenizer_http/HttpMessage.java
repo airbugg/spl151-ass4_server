@@ -8,10 +8,10 @@ import java.util.Map;
 /**
  * HttpMessage abstract class. both HttpResponseMessage & HttpRequestMessage inherit from this class.
  */
-public abstract class HttpMessage implements Message<HttpMessage> {
+public abstract class HttpMessage implements Message {
 
-    public static final String DELIMITER = "$";
-    protected static final String HTTP_VERSION = "HTTP/1.1";
+    protected final String DELIMITER = "$";
+    protected final String HTTP_VERSION = "HTTP/1.1";
     protected final Map<String, String> _headers;
     protected String _body; // object?
 
@@ -40,5 +40,6 @@ public abstract class HttpMessage implements Message<HttpMessage> {
     public String getMessageBody() {
         return _body;
     }
+
     public abstract String toString();
 }

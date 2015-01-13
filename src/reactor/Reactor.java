@@ -1,14 +1,5 @@
 package reactor;
 
-import protocol.AsyncServerProtocol;
-import protocol.ServerProtocolFactory;
-import protocol_whatsapp.WhatsappOverHttpProtocol;
-import tokenizer.MessageTokenizer;
-import tokenizer.TokenizerFactory;
-import tokenizer_http.HttpMessage;
-import tokenizer_http.HttpMessageTokenizer;
-import tokenizer_whatsapp.WhatsappOverHttpMessage;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ClosedChannelException;
@@ -20,6 +11,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+
+import protocol.*;
+import protocol_whatsapp.WhatsappOverHttpProtocol;
+import tokenizer.*;
+import tokenizer.http.HttpMessage;
+import tokenizer.http.HttpMessageTokenizer;
+import tokenizer_whatsapp.WhatsappMessage;
+import tokenizer_whatsapp.WhatsappMessageTokenizer;
 
 /**
  * An implementation of the Reactor pattern.
@@ -42,7 +41,7 @@ public class Reactor<T> implements Runnable {
 
 	/**
 	 * Creates a new Reactor
-	 * 
+	 *
 	 * @param poolSize
 	 *            the number of WorkerThreads to include in the ThreadPool
 	 * @param port
@@ -155,21 +154,13 @@ public class Reactor<T> implements Runnable {
 				if (selKey.isValid() && selKey.isReadable()) {
 					ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
 					logger.info("Channel is ready for reading");
-					try {
-						handler.read();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					handler.read();
 				}
 				// Check if there are messages to send
 				if (selKey.isValid() && selKey.isWritable()) {
 					ConnectionHandler<T> handler = (ConnectionHandler<T>) selKey.attachment();
 					logger.info("Channel is ready for writing");
-					try {
-						handler.write();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					handler.write();
 				}
 			}
 		}
@@ -178,7 +169,7 @@ public class Reactor<T> implements Runnable {
 
 	/**
 	 * Returns the listening port of the Reactor
-	 * 
+	 *
 	 * @return the listening port of the Reactor
 	 */
 	public int getPort() {
@@ -219,7 +210,7 @@ public class Reactor<T> implements Runnable {
 			int port = Integer.parseInt(args[0]);
 			int poolSize = Integer.parseInt(args[1]);
 
-			//Reactor<HttpMessage> reactor = startWhatsappServer(port, poolSize);
+			Reactor<WhatsappMessage> reactor = startWhatsappServer(port, poolSize);
 
 			Thread thread = new Thread(reactor);
 			thread.start();
@@ -230,20 +221,20 @@ public class Reactor<T> implements Runnable {
 		}
 	}
 
-	public static Reactor<WhatsappOverHttpMessage> startWhatsappServer(int port, int poolSize) throws Exception{
-		ServerProtocolFactory<WhatsappOverHttpMessage> protocolMaker = new ServerProtocolFactory<WhatsappOverHttpMessage>() {
-			public AsyncServerProtocol<WhatsappOverHttpMessage> create() {
+	public static Reactor<WhatsappMessage> startWhatsappServer(int port, int poolSize) throws Exception{
+		ServerProtocolFactory<WhatsappMessage> protocolMaker = new ServerProtocolFactory<WhatsappMessage>() {
+			public AsyncServerProtocol<WhatsappMessage> create() {
 				return new WhatsappOverHttpProtocol();
 			}
 		};
 
-		TokenizerFactory<HttpMessage> tokenizerMaker = new TokenizerFactory<HttpMessage>() {
-			public MessageTokenizer<HttpMessage> create() {
-				return new HttpMessageTokenizer();
+		TokenizerFactory<WhatsappMessage> tokenizerMaker = new TokenizerFactory<WhatsappMessage>() {
+			public MessageTokenizer<WhatsappMessage> create() {
+				return new WhatsappMessageTokenizer();
 			}
 		};
 
-		Reactor<HttpMessage> reactor = new Reactor<HttpMessage>(port, poolSize, protocolMaker, tokenizerMaker);
+		Reactor<WhatsappMessage> reactor = new Reactor<WhatsappMessage>(port, poolSize, protocolMaker, tokenizerMaker);
 		return reactor;
 	}
 }
