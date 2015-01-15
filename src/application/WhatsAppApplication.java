@@ -1,7 +1,7 @@
 package application;
 
-import tokenizer_whatsapp.WhatsappRequestMessage;
-import tokenizer_whatsapp.WhatsappResponseMessage;
+import reactor_tokenizer_whatsapp.WhatsappRequestMessage;
+import reactor_tokenizer_whatsapp.WhatsappResponseMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
