@@ -1,18 +1,11 @@
 package tokenizer_whatsapp;
 
 import protocol_http.HttpServerProtocol;
-import tokenizer.Message;
 import tokenizer.MessageTokenizer;
-import tokenizer_http.HttpMessage;
-import tokenizer_http.HttpMessageTokenizer;
-import tokenizer_http.HttpRequestMessage;
-import tokenizer_http.HttpResponseMessage;
+import tokenizer_http.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
-import java.util.Map;
 
 /**
  * WhatsappMessageTokenizer
@@ -42,30 +35,34 @@ public class WhatsappMessageTokenizer implements MessageTokenizer<WhatsappMessag
 
         WhatsappMessage msg = null;
 
+        // let us parse the underlying HTTP message.
         HttpMessage httpMessage = _httpTokenizer.nextMessage();
         HttpMessage httpResponseMessage = _httpProtocol.processMessage(httpMessage);
 
+        // if the HTTP protocol return a response, we'll convert it to a WhatsappResponse message
         if (httpResponseMessage instanceof HttpResponseMessage) {
             msg = new WhatsappResponseMessage((HttpResponseMessage) httpResponseMessage);
 
+        } else {
+
+            if (httpResponseMessage instanceof HttpPostRequest) {
+                msg = new WhatsappRequestMessage((HttpPostRequest) httpResponseMessage);
+
+            }
+
+            if (httpResponseMessage instanceof HttpGetRequest) {
+                msg = new WhatsappRequestMessage((HttpGetRequest) httpResponseMessage);
+
+            }
         }
-        else if (httpResponseMessage instanceof HttpRequestMessage) {
-            msg = new WhatsappRequestMessage(((HttpRequestMessage) httpResponseMessage).getHttpRequestURI(),
-                    httpResponseMessage.getMessageBody());
-
-        }
-
-
 
         return msg;
     }
 
     @Override
     public ByteBuffer getBytesForMessage(WhatsappMessage msg) throws CharacterCodingException {
-        try {
-            return ByteBuffer.wrap(msg.toString().getBytes("UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+
+
+
     }
 }

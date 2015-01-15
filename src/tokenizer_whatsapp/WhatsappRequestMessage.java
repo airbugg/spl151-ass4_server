@@ -1,7 +1,8 @@
 package tokenizer_whatsapp;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import tokenizer_http.HttpGetRequest;
+import tokenizer_http.HttpPostRequest;
+
 import java.util.Map;
 
 /**
@@ -9,42 +10,29 @@ import java.util.Map;
  */
 public class WhatsappRequestMessage extends WhatsappMessage {
 
-    String _action;
+    private String _requestType;
+    String _requestedURI;
     Map<String, String> _actionParameters;
 
-    public WhatsappRequestMessage(String action, String parameters) {
-        _action = action;
-        parseParameters(parameters);
+    public WhatsappRequestMessage(HttpGetRequest getRequest) { // constructor for HttpGetRequests
+        _requestType = "GET";
+        _actionParameters = null;
+        _requestedURI = getRequest.getURI();
+    }
+    public WhatsappRequestMessage(HttpPostRequest postRequest) { // constructor for HttpPostRequests
+        _requestType = "POST";
+        _actionParameters = postRequest.getPostBody();
+        _requestedURI = postRequest.getURI();
     }
 
-    public String getAction() {
-        return _action;
+    public String getRequestURI() { // returns request URI
+        return _requestedURI;
     }
 
-    public String getActionParameters() {
-        return null;
+    public Map<String, String> getURIParameters() { // returns POST body inside map
+        return _actionParameters;
     }
 
-
-    private void parseParameters(String parameters) {
-
-        String[] bodyParts = parameters.split("&");
-
-        for (String b : bodyParts) {
-            int delimiterIndex = b.indexOf("=");
-
-            String name = b.substring(0, delimiterIndex);
-            String value = b.substring(delimiterIndex + 1);
-
-            try {
-                value = URLEncoder.encode(value, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-            _actionParameters.put(name, value);
-        }
-    }
 
     @Override
     public String toString() {

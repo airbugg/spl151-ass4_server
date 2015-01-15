@@ -3,31 +3,25 @@ package tokenizer_http;
 import java.util.Map;
 
 /**
- * this class represents an HTTP request object. Inherits from HttpMessage.
+ * Created by airbag on 1/15/15.
  */
-public class HttpRequestMessage extends HttpMessage {
+public class HttpGetRequest extends HttpMessage {
 
-    private final HttpRequestType _httpRequestType;
     private final String _httpRequestURI;
 
-    public HttpRequestMessage(HttpRequestType httpRequestType, String httpRequestUri) {
-        _httpRequestType = httpRequestType;
-        _httpRequestURI = httpRequestUri;
+    public HttpGetRequest(String requestURI) {
+        this._httpRequestURI = requestURI;
     }
 
-    public String getHttpRequestURI() {
+    public String getURI() {
         return _httpRequestURI;
-    }
-
-    public HttpRequestType getHttpRequestType() {
-        return _httpRequestType;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(_httpRequestType.toString());
+        sb.append("GET");
         sb.append(" ");
         sb.append(_httpRequestURI);
         sb.append(" ");
@@ -42,9 +36,7 @@ public class HttpRequestMessage extends HttpMessage {
         }
 
         sb.append("\n");
-        sb.append(_body);
         sb.append("\n");
-        sb.append(DELIMITER);
 
         return sb.toString();
     }

@@ -2,6 +2,7 @@ package tokenizer_http;
 
 import tokenizer.MessageTokenizer;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -55,22 +56,22 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
         int messageEnd = _stringBuf.indexOf(_messageSeparator);
 
         if (messageEnd != -1) { // if separator char exists, buffer contains an entire message
+
             rawMessageString = _stringBuf.substring(0, messageEnd);
             _stringBuf.delete(0, messageEnd + _messageSeparator.length()); // clear retrieved message from buffer
 
             String line = getFirstLine(rawMessageString);
             String[] splitFirstLine = splitFirstLine(line); // retrieve first line of HTTP message
 
-            if (isResponseMessage(splitFirstLine)) { // response message?
-                HttpStatusCode statusCode = HttpStatusCode.valueOf(splitFirstLine[1]);
-
-                httpMessage = new HttpResponseMessage(statusCode);
-
-            } else { // request message, then..
-                HttpRequestType httpRequestType = HttpRequestType.valueOf(splitFirstLine[0]);
+            if (!isResponseMessage(splitFirstLine)) { // response message?
                 String requestURI = splitFirstLine[1];
 
-                httpMessage = new HttpRequestMessage(httpRequestType, requestURI);
+                if (splitFirstLine[0].equals("GET")) { // GET message?
+                    httpMessage = new HttpGetRequest(requestURI);
+                }
+                if (splitFirstLine[0].equals("POST")) { // POST, then..
+                    httpMessage = new HttpPostRequest(requestURI);
+                }
             }
 
 
@@ -86,7 +87,10 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
             }
 
             // add body
-
+            String body = getFirstLine(rawMessageString);
+            if ((httpMessage instanceof HttpPostRequest) && !body.equals("$")) {
+                ((HttpPostRequest) httpMessage).addBody(body);
+            }
         }
 
         return httpMessage;
@@ -95,13 +99,21 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
     @Override
     public ByteBuffer getBytesForMessage(HttpMessage msg) throws CharacterCodingException {
 
+        StringBuilder sb = new StringBuilder(msg.toString());
+        sb.append(_messageSeparator);
+        String returnMsg = sb.toString();
 
+        try {
+            return ByteBuffer.wrap(returnMsg.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     private boolean isResponseMessage(String[] firstLine) {
         // a response message will always begin with HTTP/1.1
-        return firstLine[0] == HTTP_VERSION;
+        return firstLine[0].equals(HTTP_VERSION);
     }
 
     private String getFirstLine(String message) {
@@ -117,10 +129,4 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
         return line.split(" ");
     }
 
-    private String httpMessageToString(HttpMessage httpMessage) {
-        StringBuilder sb = new StringBuilder();
-
-
-        return sb.toString();
-    }
 }

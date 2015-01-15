@@ -8,13 +8,11 @@ import java.util.Map;
 public class HttpResponseMessage extends HttpMessage {
 
     private final HttpStatusCode _httpStatusCode;
+    private String _body;
 
-    public HttpResponseMessage(HttpStatusCode httpStatusCode) {
+    public HttpResponseMessage(HttpStatusCode httpStatusCode, String body) {
         _httpStatusCode = httpStatusCode;
-    }
-
-    public HttpStatusCode getHttpStatusCode() {
-        return _httpStatusCode;
+        _body = body;
     }
 
     public String toString() {
@@ -35,7 +33,6 @@ public class HttpResponseMessage extends HttpMessage {
         sb.append("\n");
         sb.append(_body);
         sb.append("\n");
-        sb.append(DELIMITER);
 
         return sb.toString();
     }
