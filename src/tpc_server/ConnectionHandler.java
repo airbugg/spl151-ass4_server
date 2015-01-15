@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import reactor_protocol.ServerProtocol;
-import reactor_tokenizer.Tokenizer;
-
 public class ConnectionHandler<T> implements Runnable {
 
 	private BufferedReader in;

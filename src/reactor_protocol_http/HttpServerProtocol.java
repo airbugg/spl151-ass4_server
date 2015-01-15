@@ -1,11 +1,5 @@
 package reactor_protocol_http;
 
-import reactor_protocol.AsyncServerProtocol;
-import reactor_tokenizer_http.HttpMessage;
-import reactor_tokenizer_http.HttpRequestMessage;
-import reactor_tokenizer_http.HttpResponseMessage;
-import reactor_tokenizer_http.HttpStatusCode;
-
 /**
  * Created by airbag on 1/12/15.
  */

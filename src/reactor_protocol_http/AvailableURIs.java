@@ -1,7 +1,5 @@
 package reactor_protocol_http;
 
-import reactor_tokenizer_http.HttpRequestType;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -19,13 +17,12 @@ public enum AvailableURIs {
     QUEUE (8, "queue.jsp", HttpRequestType.GET,new LinkedList<String>()),
     NA (-1, "N/A", HttpRequestType.GET,new LinkedList<String>());
 
-    private final int _code;
     private final String _URI;
     private final HttpRequestType _type;
     private final LinkedList<String> _bodyKeys;
 
     AvailableURIs(int code, String URI, HttpRequestType type, LinkedList<String> bodyKeys) {
-        _code = code;
+        int _code = code;
         _URI = URI;
         _type = type;
         _bodyKeys = bodyKeys;

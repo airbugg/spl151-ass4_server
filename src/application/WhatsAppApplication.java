@@ -1,8 +1,5 @@
 package application;
 
-import reactor_tokenizer_whatsapp.WhatsappRequestMessage;
-import reactor_tokenizer_whatsapp.WhatsappResponseMessage;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
@@ -15,7 +12,6 @@ public class WhatsAppApplication {
 
     private ArrayList<String> _cookiesContainer;
     private Vector<User> _usersContainer;
-    private Vector<Group> _groupContainer;
     private AtomicInteger _cookieCounter;
     private Object loginDummy;
 
@@ -23,7 +19,7 @@ public class WhatsAppApplication {
     public WhatsAppApplication(){
         _cookiesContainer = new ArrayList<String>();
         _usersContainer = new Vector<User>();
-        _groupContainer = new Vector<Group>();
+        Vector<Group> _groupContainer = new Vector<Group>();
         _cookieCounter = new AtomicInteger(1);
         loginDummy = new Object();
     }

@@ -1,7 +1,4 @@
-package reactor_tokenizer_whatsapp;
-
-import reactor_tokenizer_http.HttpResponseMessage;
-import reactor_tokenizer_http.HttpStatusCode;
+package message;
 
 /**
  * WhatsappResponseMessage

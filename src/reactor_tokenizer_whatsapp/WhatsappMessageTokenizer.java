@@ -1,8 +1,9 @@
 package reactor_tokenizer_whatsapp;
 
-import reactor_protocol_http.HttpServerProtocol;
-import reactor_tokenizer.MessageTokenizer;
+import message.*;
 import reactor_tokenizer_http.*;
+import reactor_tokenizer.*;
+import reactor_protocol_http.*;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
@@ -63,6 +64,6 @@ public class WhatsappMessageTokenizer implements MessageTokenizer<WhatsappMessag
     public ByteBuffer getBytesForMessage(WhatsappMessage msg) throws CharacterCodingException {
 
 
-
+        return null;
     }
 }

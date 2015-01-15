@@ -1,4 +1,4 @@
-package reactor_tokenizer_whatsapp;
+package message;
 
 import message.Message;
 

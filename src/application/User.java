@@ -8,12 +8,11 @@ import java.util.LinkedList;
 public class User {
 
     private String _name;
-    private String _phoneNumber;
     private LinkedList<String> _messages;
 
     public User(String name, String number) {
         _name = name;
-        _phoneNumber = number;
+        String _phoneNumber = number;
         _messages = new LinkedList<>();
     }
 

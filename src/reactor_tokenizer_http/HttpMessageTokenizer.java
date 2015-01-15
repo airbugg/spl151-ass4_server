@@ -1,6 +1,8 @@
 package reactor_tokenizer_http;
 
-import reactor_tokenizer.MessageTokenizer;
+import message.HttpGetRequest;
+import message.HttpMessage;
+import message.HttpPostRequest;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -18,19 +20,16 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
 
     private final String _messageSeparator;
 
-    private final String HTTP_VERSION = "HTTP/1.1";
-
     private final Vector<HttpMessage> _messageBuf = new Vector<HttpMessage>(); // holds complete HTTP messages.
     private final StringBuffer _stringBuf = new StringBuffer(); // holds incomplete message string
 
     private final CharsetDecoder _decoder;
-    private final CharsetEncoder _encoder;
 
     public HttpMessageTokenizer() {
         _messageSeparator = "$";
         Charset charset = Charset.forName("UTF-8"); // we'll be encoding / decoding our byte stream using UTF-8
         this._decoder = charset.newDecoder();
-        this._encoder = charset.newEncoder();
+        CharsetEncoder _encoder = charset.newEncoder();
     }
 
     @Override
@@ -113,6 +112,7 @@ public class HttpMessageTokenizer implements MessageTokenizer<HttpMessage> {
 
     private boolean isResponseMessage(String[] firstLine) {
         // a response message will always begin with HTTP/1.1
+        String HTTP_VERSION = "HTTP/1.1";
         return firstLine[0].equals(HTTP_VERSION);
     }
 

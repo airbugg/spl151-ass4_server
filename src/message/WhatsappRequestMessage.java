@@ -1,7 +1,4 @@
-package reactor_tokenizer_whatsapp;
-
-import reactor_tokenizer_http.HttpGetRequest;
-import reactor_tokenizer_http.HttpPostRequest;
+package message;
 
 import java.util.Map;
 

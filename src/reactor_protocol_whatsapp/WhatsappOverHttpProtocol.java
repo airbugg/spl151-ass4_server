@@ -1,11 +1,5 @@
 package reactor_protocol_whatsapp;
 
-import reactor_protocol.AsyncServerProtocol;
-import reactor_tokenizer_http.HttpRequestType;
-import reactor_tokenizer_whatsapp.WhatsappMessage;
-import reactor_tokenizer_whatsapp.WhatsappRequestMessage;
-import reactor_tokenizer_whatsapp.WhatsappResponseMessage;
-
 /**
  * WhatsappOverHttpProtocol
  */
