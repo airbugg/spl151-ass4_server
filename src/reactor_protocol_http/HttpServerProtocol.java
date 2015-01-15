@@ -1,5 +1,8 @@
 package reactor_protocol_http;
 
+import message.*;
+import reactor_protocol.*;
+
 /**
  * Created by airbag on 1/12/15.
  */

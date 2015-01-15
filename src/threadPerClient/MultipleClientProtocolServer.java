@@ -1,4 +1,4 @@
-package tpc_server;
+package threadPerClient;
 
 import java.io.IOException;
 import java.net.ServerSocket;
