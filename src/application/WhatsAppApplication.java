@@ -1,8 +1,5 @@
 package application;
 
-import tokenizer_http.HttpResponseMessage;
-import tokenizer_http.HttpStatusCode;
-import tokenizer_whatsapp.WhatsappMessage;
 import tokenizer_whatsapp.WhatsappRequestMessage;
 import tokenizer_whatsapp.WhatsappResponseMessage;
 
@@ -108,7 +105,7 @@ public class WhatsAppApplication {
 
     private String login(WhatsappRequestMessage msg) {
             StringBuilder responseMessege = new StringBuilder();
-            HashMap<String,String> messageBody = new HashMap<String,String>(msg.getBody());
+            HashMap<String,String> messageBody = new HashMap<String,String>(msg.getURIParameters());
             _usersContainer.add(new User(messageBody.get("UserName"),messageBody.get("Phone")));
         responseMessege.append("Welcome ");
         responseMessege.append(messageBody.get("UserName"));
